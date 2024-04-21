@@ -31,22 +31,22 @@ SELECT [OrderNumber]
 	--------------------------------------------------
 	,A.[SalesTeamID]					AS SALES_TEAM_ID
 	,B.Sales_Team						AS SALES_TEAM
-	,B.Region							AS SALES_REGION
+	,B.Region						AS SALES_REGION
 	--------------------------------------------------
 	,A.[CustomerID]						AS CUSTOMER_ID
 	,C.CUSTOMER_NAME					AS CUSTOMER_NAME
 	--------------------------------------------------	
 	,A.[StoreID]						AS STORE_ID
-	,D.AreaCode							AS AREA_CODE
+	,D.AreaCode						AS AREA_CODE
 	,D.City_Name						AS CITY_NAME
-	,D.County							AS COUNTRY
-	,D.State							AS STATE
+	,D.County						AS COUNTY
+	,D.State						AS STATE
 	,D.StateCode						AS STATECODE
-	,D.Type								AS TYPE
+	,D.Type							AS TYPE
 	,D.Household_Income					AS AREA_HOUSEHOLD_INCOME
 	,D.Median_Income					AS MEDIAN_INCOME
 	,D.Population						AS POPULATION
-	,D.Latitude							AS LATITUDE
+	,D.Latitude						AS LATITUDE
 	,D.Longitude						AS LONGTITUDE
 	,D.Land_Area						AS LAND_AREA
 	,D.Water_Area						AS WATER_AREA
@@ -55,7 +55,7 @@ SELECT [OrderNumber]
 	,A.[ProductID]						AS PRODUCT_ID
 	,E.Product_Name						AS PRODUCT_NAME
 	,A.[Order_Quantity]					AS ORDER_QUANTITY
-	,A.[Discount_Applied]				AS DISCOUNT_APPIED_RATIO
+	,A.[Discount_Applied]					AS DISCOUNT_APPIED_RATIO
 	,A.[Unit_Price]						AS UNIT_PRICE
 	,A.[Unit_Cost]						AS UNIT_COST
 	----------------------------------------------------
@@ -65,26 +65,15 @@ SELECT [OrderNumber]
  ON A.SalesTeamID = B.SalesTeamID
  LEFT JOIN [MYANALYST].[dbo].[CUSTOMER_RFM_SCORE]		AS C
  ON A.CustomerID = C.CUSTOMER_ID
- LEFT JOIN [MYANALYST].[dbo].[STORE_LOCATIONS_TABLE]	AS D 
+ LEFT JOIN [MYANALYST].[dbo].[STORE_LOCATIONS_TABLE]		AS D 
  ON A.StoreID = D.StoreID
  LEFT JOIN [MYANALYST].[dbo].[PRODUCT_TABLE]			AS E
  ON A.ProductID = E.ProductID
 
+	 
  DROP TABLE IF EXISTS  [MYANALYST].[dbo].[COMPLETED_SALES_DATA];
  SELECT * 
  INTO [MYANALYST].[dbo].[COMPLETED_SALES_DATA]
  FROM #COMPLETED_SALES_DATA
 
 
-
- SELECT YEAR(ORDER_DATE)
-		,MONTH(ORDER_DATE)
-		,PRODUCT_NAME
-		,SUM(ORDER_QUANTITY) AS TOTAL_ORDER__QUANTITY
- FROM #COMPLETED_SALES_DATA
- GROUP BY YEAR(ORDER_DATE),MONTH(ORDER_DATE),	PRODUCT_NAME
- ORDER BY YEAR(ORDER_DATE),MONTH(ORDER_DATE),	TOTAL_ORDER__QUANTITY DESC
-
- SELECT ORDER_DATE,ORDER_NUMBER,ORDER_QUANTITY,SALES_TEAM, COUNT(1) FROM #COMPLETED_SALES_DATA
- GROUP BY ORDER_DATE,ORDER_NUMBER,ORDER_QUANTITY,SALES_TEAM
- HAVING COUNT(1) > 1
